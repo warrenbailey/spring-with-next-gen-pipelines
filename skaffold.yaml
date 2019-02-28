@@ -1,0 +1,30 @@
+apiVersion: skaffold/v1beta2
+kind: Config
+build:
+  artifacts:
+  - image: changeme
+    context: .
+    docker: {}
+  tagPolicy:
+    envTemplate:
+      template: '{{.DOCKER_REGISTRY}}/warrenbailey/spring-with-next-gen-pipelines:{{.VERSION}}'
+  local: {}
+deploy:
+  kubectl: {}
+profiles:
+- name: dev
+  build:
+    artifacts:
+    - docker: {}
+    tagPolicy:
+      envTemplate:
+        template: '{{.DOCKER_REGISTRY}}/warrenbailey/spring-with-next-gen-pipelines:{{.DIGEST_HEX}}'
+    local: {}
+  deploy:
+    helm:
+      releases:
+      - name: spring-with-next-gen-pipelines
+        chartPath: charts/spring-with-next-gen-pipelines
+        setValueTemplates:
+          image.repository: '{{.DOCKER_REGISTRY}}/warrenbailey/spring-with-next-gen-pipelines'
+          image.tag: '{{.DIGEST_HEX}}'
