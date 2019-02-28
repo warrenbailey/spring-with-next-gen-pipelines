@@ -1,1 +1,51 @@
 buildPack: maven
+pipelineConfig:
+  pipelines:
+    pullRequest:
+      pipeline:
+        agent:
+          image: gcr.io/kaniko-project/executor:v0.9.0
+        stages:
+          - name: maven-build
+            steps:
+              - agent:
+                  image: maven:3.3-jdk-8
+                command: mvn
+                args:
+                  - clean
+                  - install
+          - name: container-build-and-push
+            steps:
+              - command: /kaniko/executor
+                args:
+                  - --dockerfile=/workspace/workspace/Dockerfile
+                  - --destination=docker.io/warrenbailey/spring-with-next-gen-pipelines:${inputs.params.version}
+                  - --context=/workspace/workspace
+                  - --cache-repo=jenkins-x-docker-registry.jx.svc.cluster.local:5000/
+                  - --cache=true
+                  - --cache-dir=/workspace
+                  - --skip-tls-verify-registry=jenkins-x-docker-registry.jx.svc.cluster.local:5000
+    release:
+      pipeline:
+        agent:
+          image: gcr.io/kaniko-project/executor:v0.9.0
+        stages:
+          - name: maven-build
+            steps:
+              - agent:
+                  image: maven:3.3-jdk-8
+                command: mvn
+                args:
+                  - clean
+                  - install
+          - name: container-build-and-push
+            steps:
+              - command: /kaniko/executor
+                args:
+                  - --dockerfile=/workspace/workspace/Dockerfile
+                  - --destination=docker.io/warrenbailey/spring-with-next-gen-pipelines:${inputs.params.version}
+                  - --context=/workspace/workspace
+                  - --cache-repo=jenkins-x-docker-registry.jx.svc.cluster.local:5000/
+                  - --cache=true
+                  - --cache-dir=/workspace
+                  - --skip-tls-verify-registry=jenkins-x-docker-registry.jx.svc.cluster.local:5000
