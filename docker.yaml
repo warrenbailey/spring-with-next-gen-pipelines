@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  password: d2FycmVuYmFpbGV5
+  username: a2F0MjdjaGE=
+kind: Secret
+metadata:
+  annotations:
+    tekton.dev/docker-0: https://index.docker.io/v1/
+  creationTimestamp: "2019-03-06T10:11:31Z"
+  name: knative-docker-user-pass
+  namespace: jx
+  resourceVersion: "11892"
+  selfLink: /api/v1/namespaces/jx/secrets/knative-docker-user-pass
+  uid: 3697a0e7-3ff8-11e9-9cdc-42010a8400f3
+type: kubernetes.io/basic-auth
