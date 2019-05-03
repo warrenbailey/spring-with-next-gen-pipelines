@@ -18,9 +18,9 @@ pipelineConfig:
             steps:
               - command: /kaniko/executor
                 args:
-                  - --dockerfile=/workspace/workspace/Dockerfile
+                  - --dockerfile=/workspace/source/Dockerfile
                   - --destination=docker.io/warrenbailey/spring-with-next-gen-pipelines:${inputs.params.version}
-                  - --context=/workspace/workspace
+                  - --context=/workspace/source
                   - --cache-repo=jenkins-x-docker-registry.jx.svc.cluster.local:5000/
                   - --cache=true
                   - --cache-dir=/workspace
@@ -42,9 +42,9 @@ pipelineConfig:
             steps:
               - command: /kaniko/executor
                 args:
-                  - --dockerfile=/workspace/workspace/Dockerfile
+                  - --dockerfile=/workspace/source/Dockerfile
                   - --destination=docker.io/warrenbailey/spring-with-next-gen-pipelines:${inputs.params.version}
-                  - --context=/workspace/workspace
+                  - --context=/workspace/source
                   - --cache-repo=jenkins-x-docker-registry.jx.svc.cluster.local:5000/
                   - --cache=true
                   - --cache-dir=/workspace
